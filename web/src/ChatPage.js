@@ -150,7 +150,7 @@ class ChatPage extends BaseListPage {
     };
   }
 
-  newMessage(text, fileName, isHidden, isRegenerated) {
+  newMessage(text, fileNames, isHidden, isRegenerated) {
     const randomName = Setting.getRandomName();
     return {
       owner: "admin",
@@ -166,7 +166,7 @@ class ChatPage extends BaseListPage {
       isDeleted: false,
       isAlerted: false,
       isRegenerated: isRegenerated,
-      fileName: fileName,
+      fileNames: fileNames || [],
     };
   }
 
@@ -193,8 +193,8 @@ class ChatPage extends BaseListPage {
     }
   };
 
-  sendMessage(text, fileName, isHidden, isRegenerated) {
-    const newMessage = this.newMessage(text, fileName, isHidden, isRegenerated);
+  sendMessage(text, fileNames, isHidden, isRegenerated) {
+    const newMessage = this.newMessage(text, fileNames, isHidden, isRegenerated);
     MessageBackend.addMessage(newMessage)
       .then((res) => {
         if (res.status === "ok") {
@@ -680,8 +680,8 @@ class ChatPage extends BaseListPage {
               loading={this.state.messageLoading}
               messages={this.state.messages}
               messageError={this.state.messageError}
-              sendMessage={(text, fileName, regenerate = false) => {
-                this.sendMessage(text, fileName, false, regenerate);
+              sendMessage={(text, fileNames, regenerate = false) => {
+                this.sendMessage(text, fileNames, false, regenerate);
               }}
               onMessageEdit={this.handleMessageEdit}
               onCancelMessage={this.cancelMessage}

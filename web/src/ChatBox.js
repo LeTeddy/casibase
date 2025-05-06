@@ -118,28 +118,30 @@ class ChatBox extends React.Component {
     this.sttHelper.stopRecognition();
 
     let newValue = this.state.value;
+    const fileNames = [];
 
     this.state.files.forEach(uploadedFile => {
       newValue = uploadedFile.value + "\n" + newValue;
+      fileNames.push(uploadedFile.file.name);
     });
 
     if (newValue === "" || this.props.disableInput) {
       return;
     }
 
-    const date = moment();
-    const dateString = date.format("YYYYMMDD_HHmmss");
+    // const date = moment();
+    // const dateString = date.format("YYYYMMDD_HHmmss");
 
-    let fileName = "";
-    if (this.state.files[0]) {
-      fileName = this.state.files[0].file.name;
-    } else if (this.copyFileName) {
-      const fileExtension = this.copyFileName.match(/\..+$/)[0];
-      fileName = dateString + fileExtension;
-      this.copyFileName = null;
-    }
+    // let fileName = "";
+    // if (this.state.files[0]) {
+    //   fileName = this.state.files[0].file.name;
+    // } else if (this.copyFileName) {
+    //   const fileExtension = this.copyFileName.match(/\..+$/)[0];
+    //   fileName = dateString + fileExtension;
+    //   this.copyFileName = null;
+    // }
 
-    this.props.sendMessage(newValue, fileName);
+    this.props.sendMessage(newValue, fileNames);
     this.setState({value: "", files: []});
   };
 

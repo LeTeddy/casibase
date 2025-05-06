@@ -49,7 +49,7 @@ type Message struct {
 	Text              string        `xorm:"mediumtext" json:"text"`
 	ReasonText        string        `xorm:"mediumtext" json:"reasonText"`
 	ErrorText         string        `xorm:"mediumtext" json:"errorText"`
-	FileName          string        `xorm:"varchar(100)" json:"fileName"`
+	FileNames         []string      `json:"fileNames"`
 	Comment           string        `xorm:"mediumtext" json:"comment"`
 	TokenCount        int           `json:"tokenCount"`
 	TextTokenCount    int           `json:"textTokenCount"`
@@ -182,14 +182,18 @@ func RefineMessageFiles(message *Message, origin string) error {
 			return err
 		}
 
-		for _, match := range matches {
+		if len(matches) != len(message.FileNames) {
+			return fmt.Errorf("file error")
+		}
+
+		for index, match := range matches {
 			var content []byte
 			content, err = parseBase64Image(match)
 			if err != nil {
 				return err
 			}
 
-			filePath := fmt.Sprintf("%s/%s/%s/%s", message.Organization, message.User, message.Chat, message.FileName)
+			filePath := fmt.Sprintf("%s/%s/%s/%s", message.Organization, message.User, message.Chat, message.FileNames[index])
 
 			var fileUrl string
 			fileUrl, err = obj.PutObject(message.User, message.Chat, filePath, bytes.NewBuffer(content))

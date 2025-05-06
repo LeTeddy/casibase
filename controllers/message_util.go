@@ -112,7 +112,7 @@ func RefineMessageImage(message *object.Message) error {
 	base64Data := base64.StdEncoding.EncodeToString(data)
 	res := fmt.Sprintf("data:image/%s;base64,%s", ext, base64Data)
 	message.Text = fmt.Sprintf("<img src=\"%s\" width=\"100%%\" height=\"auto\">", res)
-	message.FileName = message.Name + "." + ext
+	// message.FileName = message.Name + "." + ext
 	return nil
 }
 
